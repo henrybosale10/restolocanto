@@ -1,0 +1,135 @@
+<x-guest-layout>
+    <div class="container mx-auto py-8 px-4">
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">
+                Choisir une livraison pour la commande #{{ $order->id }}
+            </h2>
+
+            <!-- Conteneur principal pour deux sections -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Section gauche : Formulaire de livraison -->
+                <div
+                    class="form-section bg-gray-50 p-6 rounded-xl shadow-lg border border-gray-200"
+                >
+                    <form
+                        action="{{ route('livraisons.store', $order->id) }}"
+                        method="POST"
+                    >
+                        @csrf
+
+                        <!-- Adresse de livraison -->
+                        <div id="address_field" class="input-field mb-6">
+                            <label
+                                for="address"
+                                class="block text-lg font-medium text-gray-700"
+                                >Adresse de livraison</label
+                            >
+                            <input
+                                type="text"
+                                name="address"
+                                id="address"
+                                placeholder="Entrez votre adresse complète"
+                                class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out"
+                                required
+                            />
+                        </div>
+
+                        <!-- Sélection de l'heure de livraison -->
+                        <div class="input-field mb-6">
+                            <label
+                                for="heure_livraison"
+                                class="block text-lg font-medium text-gray-700"
+                                >Heure de livraison (entre 9H et 22H)</label
+                            >
+                            <input
+                                type="time"
+                                id="heure_livraison"
+                                name="heure_livraison"
+                                min="09:00"
+                                max="22:00"
+                                class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out"
+                                required
+                            />
+                        </div>
+
+                        <!-- Affichage du prix de livraison -->
+                        <div class="input-field mb-8">
+                            <label
+                                class="block text-lg font-medium text-gray-700"
+                                >Prix de livraison</label
+                            >
+                            <input
+                                type="text"
+                                value="4000 CDF"
+                                class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-gray-100 text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                readonly
+                            />
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Section droite : Type de livraison et Sélection du livreur -->
+                <div
+                    class="form-section bg-gray-50 p-6 rounded-xl shadow-lg border border-gray-200"
+                >
+                    <form
+                        action="{{ route('livraisons.store', $order->id) }}"
+                        method="POST"
+                    >
+                        @csrf
+
+                        <!-- Type de livraison -->
+                        <div class="input-field mb-6">
+                            <label
+                                for="delivery_type"
+                                class="block text-lg font-medium text-gray-700"
+                                >Type de livraison</label
+                            >
+                            <select
+                                name="delivery_type"
+                                id="delivery_type"
+                                class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out"
+                                required
+                            >
+                                <option value="livraison">Livraison</option>
+                                <option value="retrait">Retrait</option>
+                            </select>
+                        </div>
+
+                        <!-- Sélection du livreur -->
+                        <div class="input-field mb-6">
+                            <label
+                                for="livreur_id"
+                                class="block text-lg font-medium text-gray-700"
+                                >Choisir un livreur</label
+                            >
+                            <select
+                                name="livreur_id"
+                                id="livreur_id"
+                                class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out"
+                                required
+                            >
+                                @foreach($livreurs as $livreur)
+                                <option value="{{ $livreur->id }}">
+                                    {{ $livreur->prenom }} {{ $livreur->nom }} -
+                                    {{ $livreur->statut }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Soumettre le formulaire -->
+                        <div class="submit-button text-center">
+                            <button
+                                type="submit"
+                                class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 transition duration-300 ease-in-out"
+                            >
+                                Valider la livraison
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-guest-layout>

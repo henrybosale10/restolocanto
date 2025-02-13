@@ -1,0 +1,4 @@
+# Ignore le dossier storage de Laravel
+/storage/*
+!/storage/app
+!/storage/public

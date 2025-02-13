@@ -1,0 +1,78 @@
+<x-guest-layout>
+    <div class="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+        <div class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-between w-full">
+
+            <!-- Formulaire à gauche -->
+            <div class="lg:w-3/5 xl:w-3/5 p-6 sm:p-12 flex flex-col">
+                <div class="text-center mb-6">
+                    <img src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png" class="w-8 mx-auto" />
+                </div>
+                <h1 class="text-2xl xl:text-3xl font-extrabold text-center mb-8">Créer un compte</h1>
+                <div class="w-full flex-1 mt-8">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!-- Name and Email -->
+                        <div class="flex space-x-8 mb-4">
+                            <div class="w-full">
+                                <label for="name" class="block font-bold text-black">Nom</label>
+                                <input type="text" name="name" id="name" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" value="{{ old('name') }}" required autofocus />
+                                @error('name') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="w-full">
+                                <label for="email" class="block font-bold text-black">Email</label>
+                                <input type="email" name="email" id="email" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" value="{{ old('email') }}" required />
+                                @error('email') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Phone and Address -->
+                        <div class="flex space-x-8 mb-4">
+                            <div class="w-full">
+                                <label for="phone" class="block font-bold text-black">Numéro de téléphone</label>
+                                <input type="text" name="phone" id="phone" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" value="{{ old('phone') }}" required />
+                                @error('phone') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="w-full">
+                                <label for="address" class="block font-bold text-black">Adresse</label>
+                                <input type="text" name="address" id="address" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" value="{{ old('address') }}" required />
+                                @error('address') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="flex space-x-8 mb-4">
+                            <div class="w-full">
+                                <label for="password" class="block font-bold text-black">Mot de passe</label>
+                                <input type="password" name="password" id="password" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" required />
+                                @error('password') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="w-full">
+                                <label for="password_confirmation" class="block font-bold text-black">Confirmer le mot de passe</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-8 py-4 rounded-lg bg-gray-100 border placeholder-gray-500 text-sm focus:outline-none" required />
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="mt-5">
+                            <label for="profile_picture" class="block font-bold text-black">Photo de profil</label>
+                            <input type="file" name="profile_picture" id="profile_picture" class="w-full px-8 py-4 rounded-lg bg-gray-100 border text-sm focus:outline-none" />
+                            @error('profile_picture') <span class="text-red-500">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300">
+                            Créer un compte
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Image -->
+            <div class="flex-1 bg-indigo-100 hidden lg:flex">
+                <div class="m-6 xl:m-8 w-1/2 bg-center bg-no-repeat"
+                     style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/NEW_IMAGE_URL'); height: 180px;"></div>
+            </div>
+        </div>
+    </div>
+</x-guest-layout>

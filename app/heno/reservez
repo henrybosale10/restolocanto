@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use App\Models\Reservation;
+use App\Models\Table;
+use Illuminate\Http\Request;
+use App\Enums\TableStatus;
+
+class ReservezController extends Controller
+{
+    /**
+     * Étape 1 : Afficher le formulaire pour commencer la réservation.
+     */
+    public function stepOne()
+    {
+        $reservation = session('reservation', []); // Récupère les données existantes dans la session
+        return view('reservation.step-one', compact('reservation'));
+    }
+
+    /**
+     * Étape 1 : Enregistrer les informations du client.
+     */
+    public function storeStepOne(Request $request)
+    {
+        $data = $request->validate([
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'telephone' => 'required|string|max:20',
+        ]);
+
+        // Stocker les données dans la session
+        $reservation = session('reservation', []);
+        $reservation = array_merge($reservation, $data);
+        session(['reservation' => $reservation]);
+
+        return redirect()->route('reservations.step.two');
+    }
+
+    /**
+     * Étape 2 : Sélection de la table et de la date.
+     */
+    public function stepTwo()
+    {
+        $reservation = session('reservation', []);
+        // Récupérer toutes les tables disponibles
+        $tables = Table::where('status', TableStatus::Avalaiable)->get(); // Corrigez "Avalaiable" en "Available"
+
+        return view('reservation.step-two', compact('reservation', 'tables'));
+    }
+
+    /**
+     * Étape 2 : Enregistrer la table et la date.
+     */
+    public function storeStepTwo(Request $request)
+    {
+        $data = $request->validate([
+            'date' => 'required|date|after:today',
+            'table_id' => 'required|exists:tables,id',
+        ]);
+
+        // Vérifier la disponibilité de la table
+        $table = Table::findOrFail($data['table_id']);
+        if ($table->status !== TableStatus::Avalaiable) {
+            return back()->withErrors(['table_id' => 'Cette table n’est pas disponible.']);
+        }
+
+        // Mettre à jour la session avec les nouvelles informations
+        $reservation = session('reservation', []);
+        $reservation = array_merge($reservation, $data);
+        session(['reservation' => $reservation]);
+
+        // Sauvegarder les données dans la base de données
+        Reservation::create($reservation);
+
+        // Mettre la table en statut occupé
+        $table->update(['status' => TableStatus::Pending]);
+
+        return redirect()->route('reservations.index')->with('success', 'Réservation effectuée avec succès.');
+    }
+}

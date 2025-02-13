@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\Reservation;
+use App\Models\Table;
+use App\Enums\TableStatus;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class ReservezController extends Controller
+{
+    /**
+     * Afficher le formulaire de réservation.
+     */
+    public function create()
+    {
+        // Définir la date minimale et maximale pour la réservation
+        $min_date = Carbon::today()->toDateString();
+        $max_date = Carbon::now()->addWeek()->toDateString();
+
+        // Récupérer les tables disponibles
+        $tables = Table::where('status', TableStatus::Available)->get();
+
+        return view('reservation.create', compact('min_date', 'max_date', 'tables'));
+    }
+
+    /**
+     * Enregistrer la réservation et rediriger vers la page de remerciement.
+     */
+    public function store(Request $request)
+    {
+        // Validation des données
+        $validated = $request->validate([
+            'prenom' => 'required|string|max:255',
+            'nom' => 'required|string|max:255',
+            'email' => 'required|email',
+            'date_reservation' => 'required|date',
+            'guest_number' => 'required|integer|min:1',
+            'table_id' => 'required|exists:tables,id',
+            'telephone' => 'required|string|max:15', // Champ requis pour le téléphone
+        ]);
+
+        try {
+            // Sauvegarde de la réservation dans la base de données
+            $reservation = Reservation::create([
+                'prenom' => $validated['prenom'],
+                'nom' => $validated['nom'],
+                'email' => $validated['email'],
+                'date_reservation' => $validated['date_reservation'],
+                'guest_number' => $validated['guest_number'],
+                'table_id' => $validated['table_id'],
+                'telephone' => $validated['telephone'],
+            ]);
+
+            // Log de succès
+            Log::info('Réservation créée avec succès', ['reservation_id' => $reservation->id]);
+
+            // Redirection vers la page de remerciement
+            return redirect()->route('thankyou');
+        } catch (\Exception $e) {
+            // Log de l'erreur
+            Log::error('Erreur lors de la création de la réservation', [
+                'message' => $e->getMessage(),
+                'request_data' => $request->all(),
+            ]);
+
+            // Retourner une erreur à l'utilisateur
+            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue lors de la création de votre réservation. Veuillez réessayer.']);
+        }
+    }
+}

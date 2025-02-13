@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+
+        <title>{{ config("app.name", "henofood") }}</title>
+
+        <!-- Fonts et Icônes -->
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+        />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            rel="stylesheet"
+        />
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs" defer></script>
+        <script src="{{ asset('js/app.js') }}" defer></script>
+
+        <style>
+            /* Styles généraux */
+            body {
+                font-family: "Nunito", sans-serif;
+            }
+
+            /* Navigation */
+            .nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: #333;
+                text-decoration: none;
+                transition: color 0.3s ease, transform 0.3s ease;
+            }
+
+            .nav-item span {
+                opacity: 0;
+                transform: translateY(10px);
+                transition: all 0.3s ease-in-out;
+            }
+
+            .nav-item:hover span {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .nav-item i {
+                margin-bottom: 5px;
+            }
+
+            .nav-item:hover i {
+                transform: scale(1.2) rotate(10deg);
+            }
+
+            .nav-item::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%) scaleX(0);
+                width: 60%;
+                height: 3px;
+                background-color: transparent;
+                transition: transform 0.3s ease-in-out,
+                    background-color 0.3s ease-in-out;
+            }
+
+            .nav-item.home:hover::after {
+                background: linear-gradient(90deg, orange, yellow);
+                transform: scaleX(1);
+            }
+
+            .nav-item.category:hover::after {
+                background: linear-gradient(90deg, #3498db, #2ecc71);
+                transform: scaleX(1);
+            }
+
+            .nav-item.menu:hover::after {
+                background: linear-gradient(90deg, #2ecc71, #1abc9c);
+                transform: scaleX(1);
+            }
+
+            .nav-item.reservation:hover::after {
+                background: linear-gradient(90deg, #e74c3c, #e67e22);
+                transform: scaleX(1);
+            }
+
+            .nav-item.about:hover::after {
+                background: linear-gradient(90deg, #9b59b6, #8e44ad);
+                transform: scaleX(1);
+            }
+
+            /* Profil utilisateur */
+            .user-profile {
+                position: fixed;
+                top: 20px;
+                right: 100px;
+                display: flex;
+                align-items: center;
+            }
+
+            .user-profile img {
+                margin-right: 5px;
+            }
+
+            /* Menu mobile */
+            .mobile-menu-icon {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Barre de navigation -->
+        <div
+            class="bg-white shadow-md"
+            x-data="{ open: false, showSecondary: false }"
+        >
+            <nav
+                class="container px-6 py-4 mx-auto flex justify-between items-center"
+            >
+                <!-- Logo -->
+                <div class="logo-container">
+                    <img
+                        src="{{ asset('images/henofood.png') }}"
+                        alt="HenoFood"
+                        class="w-16 h-16 rounded-full border-2"
+                    />
+                </div>
+
+                <!-- Menu principal -->
+                <div class="hidden md:flex space-x-8">
+                    <a
+                        href="/"
+                        class="nav-item home {{ request()->is('/') ? 'active' : '' }}"
+                    >
+                        <i class="fas fa-home text-xl"></i>
+                        <span>ACCUEIL</span>
+                    </a>
+                    <a
+                        href="{{ route('categories.index') }}"
+                        class="nav-item category {{ request()->is('categories*') ? 'active' : '' }}"
+                    >
+                        <i class="fas fa-th-large text-xl"></i>
+                        <span>CATEGORIE</span>
+                    </a>
+                    <a
+                        href="{{ route('menus.index') }}"
+                        class="nav-item menu {{ request()->is('menus*') ? 'active' : '' }}"
+                    >
+                        <i class="fas fa-utensils text-xl"></i>
+                        <span>NOTRE MENU</span>
+                    </a>
+                    <a
+                        href="{{ route('reservations.create') }}"
+                        class="nav-item reservation {{ request()->is('reservations*') ? 'active' : '' }}"
+                    >
+                        <i class="fas fa-calendar-check text-xl"></i>
+                        <span>RESERVATION</span>
+                    </a>
+                    <a
+                        href="{{ route('avis_commentaire.index') }}"
+                        class="nav-item about {{ request()->is('avis_commentaire*') ? 'active' : '' }}"
+                    >
+                        <i class="fas fa-info-circle text-xl"></i>
+                        <span>A PROPOS</span>
+                    </a>
+                </div>
+
+                <!-- Menu mobile -->
+                <div class="flex items-center space-x-4">
+                    <button
+                        @click="showSecondary = !showSecondary"
+                        class="text-gray-700"
+                    >
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Menu secondaire (mobile) -->
+            <div x-show="showSecondary" class="bg-gray-200 py-4 px-6">
+                @auth
+                <a href="{{ route('cart.index') }}" class="nav-item">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span>Panier</span>
+                </a>
+                <a href="{{ route('notifications.index') }}" class="nav-item">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="{{ route('profile.show') }}" class="nav-item">
+                    <i class="fas fa-user text-xl"></i>
+                    <span>Profil</span>
+                </a>
+                @else
+                <a href="{{ route('login') }}" class="nav-item">
+                    <i class="fas fa-sign-in-alt text-xl"></i>
+                    <span>Connexion</span>
+                </a>
+                @endauth
+            </div>
+        </div>
+    </body>
+</html>

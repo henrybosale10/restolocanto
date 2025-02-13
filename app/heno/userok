@@ -1,0 +1,114 @@
+<?php
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+class UserGestionController extends Controller
+{
+    // Fonction pour afficher le formulaire d'inscription
+    public function registerForm()
+    {
+        return view('auth.register');  // Vue pour l'inscription dans le dossier 'auth'
+    }
+
+    // Fonction pour gérer l'inscription
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        if ($request->hasFile('profile_picture')) {
+            $validated['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'profile_picture' => $validated['profile_picture'] ?? null,
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('login')->with('success', 'Inscription réussie. Veuillez vous connecter.');
+    }
+
+    // Fonction pour afficher le formulaire de connexion
+    public function loginForm()
+    {
+        return view('auth.login');  // Vue pour la connexion dans le dossier 'auth'
+    }
+
+    // Fonction pour gérer la connexion de l'utilisateur
+    public function login(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        $user = User::where('email', $validated['email'])->first();
+
+        if ($user && Hash::check($validated['password'], $user->password)) {
+            Auth::login($user);
+            return redirect()->route('home')->with('success', 'Connexion réussie.');
+        }
+
+        return back()->with('error', 'Email ou mot de passe incorrect.');
+    }
+
+    // Fonction pour afficher le profil de l'utilisateur
+    public function show()
+    {
+        $user = Auth::user(); // Utiliser l'utilisateur authentifié
+        return view('auth.show', compact('user'));  // Vue pour afficher le profil dans le dossier 'auth'
+    }
+
+    // Fonction pour afficher le formulaire de modification du profil
+    public function editForm()
+    {
+        $user = Auth::user();
+        return view('auth.edit', compact('user'));  // Vue pour le formulaire de modification dans le dossier 'auth'
+    }
+
+    // Fonction pour gérer la modification des données du profil
+    public function edit(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        $user = Auth::user();
+
+        if ($request->hasFile('profile_picture')) {
+            if ($user->profile_picture) {
+                unlink(storage_path('app/public/' . $user->profile_picture));
+            }
+            $validated['profile_picture'] = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'profile_picture' => $validated['profile_picture'] ?? $user->profile_picture,
+        ]);
+
+        return redirect()->route('show')->with('success', 'Profil mis à jour avec succès.');
+    }
+}

@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\PlatClient;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class CartController extends Controller
+{
+    // Afficher le contenu du panier
+    public function index()
+    {
+        $cart = Cart::where('user_id', Auth::id())->get();
+        $total = $cart->sum(function ($item) {
+            return $item->platClient->prix * $item->quantity;
+        });
+
+        return view('frontend.cart.index', compact('cart', 'total'));
+    }
+
+    // Ajouter un article au panier
+    public function add(Request $request)
+{
+    $platclientId = $request->input('platclient_id');  // Utilisation de 'platclient_id' en minuscules
+    $quantity = $request->input('quantity', 1);  // Valeur par défaut si non précisé
+
+    // Chercher ou créer l'élément du panier
+    $cartItem = Cart::firstOrCreate(
+        ['platclient_id' => $platclientId, 'user_id' => Auth::id()],
+        ['quantity' => $quantity]
+    );
+
+    // Si l'élément existe déjà, mettre à jour la quantité
+    if (!$cartItem->wasRecentlyCreated) {
+        $cartItem->quantity += $quantity;
+        $cartItem->save();
+    }
+
+    return redirect()->route('cart.index')->with('success', 'Article ajouté au panier.');
+}
+
+    // Supprimer un article du panier
+    public function remove($id)
+    {
+        $cartItem = Cart::find($id);
+        if ($cartItem && $cartItem->user_id == Auth::id()) {
+            $cartItem->delete();
+            return redirect()->route('cart.index')->with('success', 'Article supprimé du panier.');
+        }
+
+        return redirect()->route('cart.index')->with('error', 'Article non trouvé.');
+    }
+
+    // Mettre à jour la quantité d'un article
+    public function update(Request $request, $id)
+    {
+        $cartItem = Cart::find($id);
+        if ($cartItem && $cartItem->user_id == Auth::id()) {
+            $cartItem->quantity = $request->input('quantity');
+            $cartItem->save();
+            return redirect()->route('cart.index')->with('success', 'Quantité mise à jour.');
+        }
+
+        return redirect()->route('cart.index')->with('error', 'Article non trouvé.');
+    }
+
+    // Vider le panier
+    public function clear()
+    {
+        $cart = Cart::where('user_id', Auth::id())->get();
+        foreach ($cart as $item) {
+            $item->delete();
+        }
+
+        return redirect()->route('cart.index')->with('success', 'Panier vidé.');
+    }
+}

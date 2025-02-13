@@ -1,0 +1,97 @@
+<x-guest-layout>
+    <div class="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+        <div class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+            <div class="lg:w-4/5 xl:w-3/4 p-6 sm:p-12"> <!-- Ajuster la largeur du formulaire -->
+                <div class="text-center mb-6">
+                    <img src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png" class="w-8 mx-auto" /> <!-- Limiter l'image à 30px -->
+                </div>
+                <h1 class="text-2xl xl:text-3xl font-extrabold text-center mb-8">Créer un compte</h1>
+                <div class="w-full flex-1 mt-8">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
+                        @csrf
+
+                        <!-- Name and Email on the same line -->
+                        <div class="flex space-x-5">
+                            <!-- Name -->
+                            <div class="w-full">
+                                <label for="name" class="block font-bold text-black">Nom</label>
+                                <input type="text" name="name" id="name" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value="{{ old('name') }}" required autofocus />
+                                @error('name') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Email -->
+                            <div class="w-full">
+                                <label for="email" class="block font-bold text-black">Email</label>
+                                <input type="email" name="email" id="email" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value="{{ old('email') }}" required />
+                                @error('email') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Phone and Address on the same line -->
+                        <div class="flex space-x-5 mt-5">
+                            <!-- Phone -->
+                            <div class="w-full">
+                                <label for="phone" class="block font-bold text-black">Numéro de téléphone</label>
+                                <input type="text" name="phone" id="phone" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value="{{ old('phone') }}" required />
+                                @error('phone') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Address -->
+                            <div class="w-full">
+                                <label for="address" class="block font-bold text-black">Adresse</label>
+                                <input type="text" name="address" id="address" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" value="{{ old('address') }}" required />
+                                @error('address') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+                        </div>
+
+                        <!-- Password and Confirmation on the same line -->
+                        <div class="flex space-x-5 mt-5">
+                            <!-- Password -->
+                            <div class="w-full">
+                                <label for="password" class="block font-bold text-black">Mot de passe</label>
+                                <input type="password" name="password" id="password" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" required />
+                                @error('password') <span class="text-red-500">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Password Confirmation -->
+                            <div class="w-full">
+                                <label for="password_confirmation" class="block font-bold text-black">Confirmer le mot de passe</label>
+                                <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" required />
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture -->
+                        <div class="mx-auto mt-5">
+                            <label for="profile_picture" class="block font-bold text-black">Photo de profil</label>
+                            <input type="file" name="profile_picture" id="profile_picture" class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" />
+                            @error('profile_picture') <span class="text-red-500">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                            <span class="ml-3">
+                                Créer un compte
+                            </span>
+                        </button>
+                    </form>
+
+                    <!-- Login Link -->
+                    <div class="text-center mt-5">
+                        <p class="text-sm text-gray-600">
+                            Vous avez déjà un compte ?
+                            <a href="{{ route('login') }}" class="text-indigo-600 hover:text-indigo-800">Se connecter</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+                <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+                     style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg'); height: 250px;">
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</x-guest-layout>
