@@ -35,12 +35,7 @@ return [
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
     'redirect' => env('GOOGLE_REDIRECT_URI'),
 ],
-'maishapay' => [
-        'public_key' => env('MAISHAPAY_PUBLIC_KEY'),
-        'secret_key' => env('MAISHAPAY_SECRET_KEY'),
-        'mode' => env('MAISHAPAY_MODE'),
-        'callback_url' => env('MAISHAPAY_CALLBACK_URL'),
-    ],
+
 
 
 

@@ -164,7 +164,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @foreach($avisCommentaires as $avis)
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out group relative">
                             <div class="flex items-center mb-4">
                                 <img src="{{ asset('storage/' . $avis->user->profile_picture) }}" alt="Avatar" class="w-12 h-12 rounded-full mr-4 object-cover">
                                 <div>
@@ -206,6 +206,19 @@
                                     </form>
                                 </div>
                             </div>
+
+                            <!-- Affichage des utilisateurs ayant aimé le commentaire au survol -->
+                            <div class="absolute inset-x-0 bottom-0 bg-white dark:bg-gray-800 p-4 shadow-lg rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <p class="font-semibold text-gray-800 dark:text-gray-100">Utilisateurs ayant aimé ce commentaire :</p>
+                                <div class="flex flex-wrap mt-2">
+                                    @foreach($avis->likes as $like)
+                                        <div class="mr-4 mb-2 flex items-center">
+                                            <img src="{{ asset('storage/' . $like->profile_picture) }}" alt="Avatar" class="w-8 h-8 rounded-full mr-2 object-cover">
+                                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ $like->name }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -216,6 +229,7 @@
                 </div>
             </div>
         </section>
+
 
     </main>
 

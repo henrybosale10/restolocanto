@@ -1,27 +1,68 @@
 <x-guest-layout>
     <!-- Section principale avec carrousel d'images -->
     <section>
-      <div id="background-slider" class="container w-[84%] h-[210px] py-10 mx-auto text-left bg-center bg-no-repeat bg-cover md:max-w-none md:text-center rounded-xl shadow-lg transition-all duration-500 ease-in-out opacity-100" style="background-image: url('{{ asset('images/henofood.webp') }}');">
-        <h1 class="font-mono text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 md:text-center sm:leading-none lg:text-4xl">
-          <i class="fas fa-utensils mr-3 text-xl"></i> <!-- Icône de fourchette et couteau -->
-          <span class="inline md:block">Bienvenue chez Locanto</span>
-        </h1>
-        <div class="flex flex-col items-center mt-12 text-center">
-          <span class="relative inline-flex w-full md:w-auto">
-            <a href="{{ route('reservations.create') }}" class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium leading-5 text-white bg-green-600 rounded-full lg:w-full md:w-auto hover:bg-green-500 focus:outline-none transition-all duration-300 ease-in-out">
-              <i class="fas fa-calendar-check text-base mr-1"></i> Réservez ici
-            </a>
-          </span>
+        <div id="background-slider" class="container w-[84%] h-[210px] py-10 mx-auto text-left bg-center bg-no-repeat bg-cover md:max-w-none md:text-center rounded-xl shadow-lg transition-all duration-500 ease-in-out opacity-100" style="background-image: url('{{ asset('images/henofood.webp') }}');">
+          <h1 class="font-mono text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 md:text-center sm:leading-none lg:text-4xl">
+            <i class="fas fa-utensils mr-3 text-xl"></i>
+            <span class="inline md:block">Bienvenue chez Locanto</span>
+          </h1>
+          <div class="flex flex-col items-center mt-12 text-center">
+            <span class="relative inline-flex w-full md:w-auto">
+              <a href="{{ route('reservations.create') }}" class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium leading-5 text-white bg-green-600 rounded-full lg:w-full md:w-auto hover:bg-green-500 focus:outline-none transition-all duration-300 ease-in-out">
+                <i class="fas fa-calendar-check text-base mr-1"></i> Réservez ici
+              </a>
+            </span>
+          </div>
+          <div class="absolute top-1/2 left-0 transform -translate-y-1/2 px-4">
+            <button id="prev" class="text-black rounded-full p-3 shadow-md hover:bg-gray-700 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 ease-in-out">&#11013;</button>
+          </div>
+          <div class="absolute top-1/2 right-0 transform -translate-y-1/2 px-4">
+            <button id="next" class="text-black rounded-full p-3 shadow-md hover:bg-gray-700 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 ease-in-out">&#10145;</button>
+          </div>
         </div>
-        <!-- Boutons de navigation -->
-        <div class="absolute top-1/2 left-0 transform -translate-y-1/2 px-4">
-          <button id="prev" class="text-black rounded-full p-3 shadow-md hover:bg-gray-700 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 ease-in-out"> &#11013; </button>
-        </div>
-        <div class="absolute top-1/2 right-0 transform -translate-y-1/2 px-4">
-          <button id="next" class="text-black rounded-full p-3 shadow-md hover:bg-gray-700 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all duration-300 ease-in-out"> &#10145; </button>
-        </div>
-      </div>
-    </section>
+
+        <script>
+          const images = [
+            "{{ asset('images/espace (1).jpg') }}",
+            "{{ asset('images/espace (7).jpg') }}",
+            "{{ asset('images/espace (3).jpg') }}",
+            "{{ asset('images/halll.jpg') }}",
+            "{{ asset('images/espace (4).jpg')}}",
+            "{{ asset('images/espace (5).jpg')}}"
+          ];
+
+          let currentIndex = 0;
+          const slider = document.getElementById('background-slider');
+
+          function changeBackground(index) {
+            slider.classList.add('opacity-0');
+            setTimeout(() => {
+              currentIndex = index;
+              slider.style.backgroundImage = `url('${images[currentIndex]}')`;
+              slider.classList.remove('opacity-0');
+            }, 500);
+          }
+
+          setInterval(() => {
+            const nextIndex = (currentIndex + 1) % images.length;
+            changeBackground(nextIndex);
+          }, 60000);
+
+          currentIndex = Math.floor(Math.random() * images.length);
+          slider.style.backgroundImage = `url('${images[currentIndex]}')`;
+
+          document.getElementById('prev').addEventListener('click', () => {
+            const prevIndex = (currentIndex - 1 + images.length) % images.length;
+            changeBackground(prevIndex);
+          });
+
+          document.getElementById('next').addEventListener('click', () => {
+            const nextIndex = (currentIndex + 1) % images.length;
+            changeBackground(nextIndex);
+          });
+        </script>
+      </section>
+
 
     <!-- About Section -->
     <section class="px-2 py-32 bg-white md:px-0">
@@ -268,8 +309,5 @@
             </div>
         </div>
     </section>
-
-
-
 
   </x-guest-layout>

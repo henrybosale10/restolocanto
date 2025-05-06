@@ -109,4 +109,8 @@ class User extends Authenticatable
             'avatar' => $googleUser->getAvatar(),
         ]);
     }
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

@@ -12,53 +12,47 @@
             </div>
         @endif
 
-        <!-- Barre de recherche et bouton de tri -->
-        <div class="flex justify-between mb-6">
+        <div class="flex justify-between mb-6 items-center">
             <!-- Barre de recherche -->
-            <div class="w-3/4">
+            <div class="flex items-center w-full md:w-1/2">
                 <input
                     type="text"
                     id="searchMenu"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    placeholder="Recherchez un menu..."
-                    oninput="filterMenu()">
+                    class="w-full p-2 border rounded-lg"
+                    placeholder="Rechercher un plat..."
+                    oninput="filterMenu()"
+                />
+                <button
+                    id="searchToggleButton"
+                    class="ml-2 p-2 bg-gray-600 text-white rounded-lg"
+                    onclick="toggleSearch()"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-4-4m0 0l-4 4m4-4V5m0 0l4 4-4 4" />
+                    </svg>
+                </button>
             </div>
 
-            <!-- Bouton pour dérouler/masquer le mini tableau de tri avec une icône -->
-            <button id="toggleButton" onclick="toggleTable()" class="w-1/4 text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded flex justify-center items-center">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path d="M3 5h14a1 1 0 110 2H3a1 1 0 110-2zM3 9h14a1 1 0 110 2H3a1 1 0 110-2zM3 13h14a1 1 0 110 2H3a1 1 0 110-2z" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Mini tableau avec les options de tri (initialement caché) en flex -->
-        <div class="flex justify-center items-center h-screen">
-            <div id="sortingTable" class="hidden w-16 h-16 mb-6 bg-white shadow-lg rounded-md p-2 overflow-auto">
-                <div class="flex space-x-4 justify-center items-center">  <!-- Centrage avec flexbox -->
-                    <!-- Tri A-Z avec icône flèche vers le bas -->
-                    <button onclick="sortMenu('alphabeticalAZ')" class="text-white bg-blue-600 hover:bg-blue-700 px-1 py-0.5 rounded-sm text-center flex items-center">
-                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.293 10.293a1 1 0 011.414 0L10 13.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                        AZ
-                    </button>
-                    <!-- Tri Z-A avec icône flèche vers le haut -->
-                    <button onclick="sortMenu('alphabeticalZA')" class="text-white bg-blue-600 hover:bg-blue-700 px-1 py-0.5 rounded-sm text-center flex items-center">
-                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.293 5.293a1 1 0 011.414 0L10 2.414l3.293 3.293a1 1 0 111.414-1.414l-4-4a1 1 0 01-1.414 0l-4 4a1 1 0 010 1.414z" clip-rule="evenodd"/>
-                        </svg>
-                        ZA
-                    </button>
-
-                    <!-- Tri aléatoire avec icône aléatoire -->
-                    <button onclick="sortMenu('random')" class="text-white bg-blue-600 hover:bg-blue-700 px-1 py-0.5 rounded-sm text-center flex items-center">
-                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M15 4a1 1 0 011 1v10a1 1 0 11-2 0V7.414l-6.707 6.707a1 1 0 11-1.414-1.414L13.586 6H6a1 1 0 110-2h9a1 1 0 011 1z" clip-rule="evenodd"/>
-                        </svg>
-                        Aléa
-                    </button>
-                </div>
+            <!-- Boutons de tri -->
+            <div class="flex ml-4 space-x-2">
+                <button
+                    class="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
+                    onclick="sortMenu('alphabeticalAZ')"
+                >
+                    A-Z
+                </button>
+                <button
+                    class="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
+                    onclick="sortMenu('alphabeticalZA')"
+                >
+                    Z-A
+                </button>
+                <button
+                    class="p-2 bg-gray-600 text-white rounded-full hover:bg-gray-700"
+                    onclick="sortMenu('random')"
+                >
+                    Aleatoire
+                </button>
             </div>
         </div>
 
@@ -141,12 +135,6 @@
             }
         }
 
-        // Fonction pour basculer la visibilité du mini tableau de tri
-        function toggleTable() {
-            const table = document.getElementById('sortingTable');
-            table.classList.toggle('hidden');
-        }
-
         // Fonction de tri des menus
         function sortMenu(sortBy) {
             const menuItems = Array.from(document.querySelectorAll('.menu-item'));
@@ -163,18 +151,6 @@
                     const nameA = a.querySelector('h4').textContent.trim().toLowerCase();
                     const nameB = b.querySelector('h4').textContent.trim().toLowerCase();
                     return nameB.localeCompare(nameA);
-                });
-            } else if (sortBy === 'priceLowToHigh') {
-                sortedItems = menuItems.sort((a, b) => {
-                    const priceA = parseFloat(a.querySelector('.text-xl').textContent.replace(' CDF', '').trim());
-                    const priceB = parseFloat(b.querySelector('.text-xl').textContent.replace(' CDF', '').trim());
-                    return priceA - priceB;
-                });
-            } else if (sortBy === 'priceHighToLow') {
-                sortedItems = menuItems.sort((a, b) => {
-                    const priceA = parseFloat(a.querySelector('.text-xl').textContent.replace(' CDF', '').trim());
-                    const priceB = parseFloat(b.querySelector('.text-xl').textContent.replace(' CDF', '').trim());
-                    return priceB - priceA;
                 });
             } else if (sortBy === 'random') {
                 sortedItems = menuItems.sort(() => Math.random() - 0.5);

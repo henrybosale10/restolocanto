@@ -28,7 +28,7 @@ use App\Http\Controllers\Admin\ContactController as Contact;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\Admin\RépondreController;
 use App\Http\Controllers\Auth\SocialAuthController;
-use App\Http\Controllers\CashfreePaymentController;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,8 +37,14 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
 // Page d'accueil
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
+
+Route::get('/home', function () {
+    return redirect('/');
+});
+
 
 // Routes pour les catégories
 Route::prefix('categories')->group(function () {
@@ -59,21 +65,20 @@ Route::prefix('reservations')->group(function () {
     Route::get('/create', [ReservezController::class, 'create'])->name('reservations.create');
     Route::post('/store', [ReservezController::class, 'store'])->name('reservations.store');
 });
-Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
-Route::post('/payment-callback', function (Request $request) {
-    $status = $request->input('status');
-    $transactionRefId = $request->input('transactionRefId');
 
-    if ($status == 202) {
-        \App\Models\Order::where('transaction_id', $transactionRefId)
-            ->update(['status' => 'payé']);
+Route::prefix('payment')->group(function () {
+    // Afficher la page de checkout (GET)
+    Route::get('/checkout/{order_id}', [PaymentController::class, 'showCheckout'])->name('checkout.show');
 
-        return response()->json(['message' => 'Paiement réussi'], 200);
-    }
+    // Traiter la soumission du formulaire de paiement (POST)
+    Route::post('/checkout', [PaymentController::class, 'processCheckout'])->name('checkout.process');
 
-    return response()->json(['message' => 'Échec du paiement'], 400);
+    // Callback après paiement (POST, si c'est un retour d'API de paiement)
+    Route::post('/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+
+    // Page de confirmation de succès (GET)
+    Route::get('/success', [PaymentController::class, 'success'])->name('payment.success');
 });
-
 
 Route::middleware('auth')->prefix('profile')->name('profile.')->group(function () {
     Route::get('/', [UserController::class, 'showProfile'])->name('show');
@@ -144,8 +149,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/confirm-order', [OrderController::class, 'confirmOrder']);
         Route::get('/thank-you/{orderId}', [OrderController::class, 'thankYou'])->name('thankyou.page');
         Route::get('/historique-commandes', [OrderController::class, 'index'])->name('historique.commandes');
-        Route::get('/livraison/{orderId}/payment', [LivraisonController::class, 'paymentPage'])->name('livraison.payment');
-        
+
 
     });
 
@@ -244,10 +248,6 @@ Route::prefix('admin/repondre')->name('admin.repondre.')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 });
-
-Route::get('cashfree/payments/create',[CashfreePaymentController::class,'create'])->name(('callback'));
-Route::post('cashfree/payments/store',[CashfreePaymentController::class,'store'])->name(('store'));
-Route::any('cashfree/payments/success',[CashfreePaymentController::class,'sucess'])->name(('succes'));
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Afficher toutes les notifications

@@ -25,4 +25,10 @@ class Livraison extends Model
     {
         return $this->belongsTo(Livreur::class, 'livreur_id');
     }
+
+    public function paiement()
+{
+    return $this->belongsTo(Paiement::class, 'commande_id', 'commande_id');
+}
+
 }

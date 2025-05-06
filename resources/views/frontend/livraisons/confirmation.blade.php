@@ -30,37 +30,13 @@
                 </ul>
             </div>
 
-            <div class="mt-8">
-                <h3 class="font-semibold text-2xl text-gray-900 flex items-center">
-                    <i class="fas fa-truck text-red-500 mr-3"></i>
-                    Mode de livraison
-                </h3>
-                <p class="text-lg text-gray-700 mt-2 flex items-center">
-                    <i class="fas fa-shipping-fast text-gray-600 mr-3"></i>
-                    <strong>Type: </strong> {{ $livraison->type }}
-                </p>
-                <p class="text-lg text-gray-700 mt-2 flex items-center">
-                    <i class="fas fa-map-marker-alt text-gray-600 mr-3"></i>
-                    <strong>Adresse: </strong> {{ $livraison->adresse }}
-                </p>
-                <p class="text-lg text-gray-700 mt-2 flex items-center">
-                    <i class="fas fa-circle text-gray-600 mr-3"></i>
-                    <strong>Statut: </strong> {{ $livraison->statut }}
-                </p>
-
-                <p class="text-lg text-gray-700 mt-2 flex items-center">
-                    <i class="fas fa-clock text-gray-600 mr-3"></i>
-                    <strong>Date et Heure de livraison : </strong>   {{ $livraison->heure_livraison }}
-                </p>
-            </div>
-
             <div class="mt-10">
-                <a href="{{ route('livraison.payment', ['orderId' => $order->id]) }}" class="btn btn-primary">
-                    Passer au paiement
-                </a>
-
+                <form action="{{ route('checkout.show', ['order_id' => $order->id]) }}" method="GET">
+                    <button type="submit" class="btn btn-primary">
+                        Passer au paiement
+                    </button>
+                </form>
             </div>
-
         </div>
     </div>
 </x-guest-layout>

@@ -61,7 +61,7 @@ class LivraisonController extends Controller
             'livreur_id' => $validated['livreur_id'],
             'heure_livraison' => $heureLivraison,
             'statut' => 'en attente',
-            'prix' => 4000,
+            'prix' => 4000,  // Vous pouvez ajuster le prix ici
         ]);
 
         Auth::user()->notify(new LivraisonConfirmed($livraison));
@@ -98,18 +98,6 @@ class LivraisonController extends Controller
 
         $livraison->update(['statut' => $validated['statut']]);
         return back()->with('success', 'Statut mis à jour.');
-    }
-
-    // Redirection vers MaishaPay
-    public function paymentPage($orderId)
-    {
-        $order = Order::where('id', $orderId)->where('user_id', Auth::id())->first();
-        if (!$order) {
-            return redirect()->route('home')->with('error', 'Commande introuvable.');
-        }
-
-        $maishaPayUrl = 'https://www.maishapay.net/pay?amount=' . $order->total_price . '&order_id=' . $order->id;
-        return redirect()->away($maishaPayUrl);
     }
 
     // Afficher les détails d'une livraison

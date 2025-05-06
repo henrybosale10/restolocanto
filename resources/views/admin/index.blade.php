@@ -48,25 +48,37 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-700 overflow-hidden shadow-lg sm:rounded-lg">
                 <div class="p-6 text-gray-800 dark:text-gray-100">
-                    <h3 class="text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Bienvenue à RIKU24</h3>
-                    <p class="mb-4">
-                        RIKU24 est la solution tout-en-un dédiée à la gestion complète de votre restaurant. Nous offrons une plateforme moderne
-                        qui vous permet de gérer efficacement vos menus, vos réservations, ainsi que l'ensemble des interactions avec vos clients et votre équipe.
+                    <!-- Titre principal -->
+                    <h3 class="text-3xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">Bienvenue chez RIKU24</h3>
+
+                    <!-- Premier paragraphe -->
+                    <p class="mb-4 bg-indigo-50 dark:bg-indigo-900 p-4 rounded-lg text-gray-700 dark:text-gray-200">
+                        RIKU24 est bien plus qu'une simple plateforme : c'est votre partenaire dédié à la gestion complète de votre restaurant. Conçue pour simplifier votre quotidien, notre solution tout-en-un vous permet de gérer vos menus, vos réservations, ainsi que toutes les interactions avec vos clients et votre équipe, le tout sur une interface moderne et intuitive.
                     </p>
-                    <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-300 mb-2">Histoire et Spécialités</h4>
-                    <p class="mb-4">
-                        RIKU24 est un restaurant réputé pour sa cuisine traditionnelle africaine, mettant en avant des plats riches en saveurs
-                        et en histoire. Depuis sa fondation, nous nous engageons à offrir une expérience culinaire inoubliable, avec un menu qui
-                        célèbre la diversité culinaire africaine.
+
+                    <!-- Sous-titre : Histoire et Spécialités -->
+                    <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-300 mb-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-2 rounded-lg">
+                        Notre Histoire et Nos Spécialités
+                    </h4>
+
+                    <!-- Paragraphe sur l'histoire -->
+                    <p class="mb-4 bg-purple-50 dark:bg-purple-900 p-4 rounded-lg text-gray-700 dark:text-gray-200">
+                        RIKU24 incarne l'essence de la cuisine traditionnelle africaine, alliant authenticité et modernité. Depuis nos débuts, nous nous efforçons de proposer une expérience culinaire unique, mettant en avant des plats riches en saveurs et en histoire. Notre menu reflète la diversité et la richesse des traditions culinaires africaines, tout en s'adaptant aux goûts contemporains.
                     </p>
-                    <p class="mb-4">
-                        Chaque plat est préparé avec des ingrédients frais, issus des producteurs locaux, pour offrir à nos clients une expérience
-                        gustative unique. Nous mettons un point d'honneur à respecter les traditions culinaires tout en y apportant une touche moderne.
+
+                    <!-- Paragraphe sur les ingrédients -->
+                    <p class="mb-4 bg-pink-50 dark:bg-pink-900 p-4 rounded-lg text-gray-700 dark:text-gray-200">
+                        Nous sélectionnons avec soin des ingrédients frais et locaux, issus de producteurs partenaires, pour garantir une qualité exceptionnelle à chaque plat. Chez RIKU24, nous croyons en une cuisine qui respecte les traditions tout en innovant pour surprendre et ravir nos clients.
                     </p>
-                    <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-300 mb-2">Rôles et Responsabilités de l'Administrateur :</h4>
-                    <p class="mb-4">
-                        En tant qu'administrateur, vous avez la responsabilité de superviser l'ensemble des opérations du restaurant. Vous êtes en charge
-                        de la gestion des utilisateurs, de la configuration du menu, ainsi que de l'analyse des données relatives à l'activité du restaurant.
+
+                    <!-- Sous-titre : Rôles et Responsabilités -->
+                    <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-300 mb-2 bg-gradient-to-r from-pink-500 to-red-500 text-white p-2 rounded-lg">
+                        Rôles et Responsabilités de l'Administrateur
+                    </h4>
+
+                    <!-- Paragraphe sur les responsabilités -->
+                    <p class="mb-4 bg-red-50 dark:bg-red-900 p-4 rounded-lg text-gray-700 dark:text-gray-200">
+                        En tant qu'administrateur, vous jouez un rôle central dans le succès de RIKU24. Vous êtes responsable de la supervision des opérations quotidiennes, de la gestion des utilisateurs, de la configuration des menus, et de l'analyse des données pour optimiser les performances du restaurant. Votre mission est de garantir une expérience fluide et professionnelle, tant pour vos clients que pour votre équipe.
                     </p>
                 </div>
 
